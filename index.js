@@ -31,6 +31,7 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
+
 async function run() {
   try {
     const usersCollection = client.db("bdcom").collection("users");
@@ -58,7 +59,7 @@ async function run() {
         return res.status(403).send({ message: "forbidden access" });
       }
       const result = await usersCollection.findOne(query);
-      res.send(result);
+      return res.send(result);
     });
     //all products
     app.post("/allproducts", async (req, res) => {
@@ -93,9 +94,9 @@ async function run() {
         const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, {
           expiresIn: "24h",
         });
-        res.send({ accessToken: token });
+        return res.send({ accessToken: token });
       }
-      res.status(403).send({ accessToken: "" });
+      return res.status(403).send({ accessToken: "" });
     });
   } finally {
   }
